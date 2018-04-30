@@ -1,0 +1,501 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "DataLakeAnalyticsSparkResourcePoolManagementClient",
+    "description": "Creates an Azure Data Lake Analytics Spark resource pool client.",
+    "version": "2018-02-01-preview",
+    "x-ms-code-generation-settings": {
+      "useDateTimeOffset": true,
+      "internalConstructors": true
+    }
+  },
+  "x-ms-parameterized-host": {
+    "hostTemplate": "{accountName}.{adlaResourcePoolDnsSuffix}",
+    "parameters": [
+      {
+        "name": "accountName",
+        "description": "The Azure Data Lake Analytics account to execute spark resource pool operations on.",
+        "required": true,
+        "type": "string",
+        "in": "path",
+        "x-ms-skip-url-encoding": true
+      },
+      {
+        "$ref": "#/parameters/adlaResourcePoolDnsSuffixInPath"
+      }
+    ]
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/activityTypes/spark/resourcePools/{resourcePoolId}": {
+      "put": {
+        "tags": [
+          "SparkResourcePools"
+        ],
+        "operationId": "SparkResourcePools_Create",
+        "description": "Submits a resource pool creation request to the specified Data Lake Analytics account.",
+        "parameters": [
+          {
+            "name": "resourcePoolId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "resource pool identifier. Uniquely identifies the resource pool across all resource pools submitted to the service."
+          },
+          {
+            "name": "parameters",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateSparkResourcePool"
+            },
+            "description": "The parameters to submit a spark resource pool creation request."
+          },
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully submitted the spark resource pool creation request.",
+            "schema": {
+              "$ref": "#/definitions/SparkResourcePool"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "SparkResourcePools"
+        ],
+        "operationId": "SparkResourcePools_Get",
+        "description": "Gets the resource pool information for the specified resource pool ID.",
+        "parameters": [
+          {
+            "name": "resourcePoolId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "resource pool ID."
+          },
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved details of the specified resource pool.",
+            "schema": {
+              "$ref": "#/definitions/SparkResourcePool"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "SparkResourcePools"
+        ],
+        "operationId": "SparkResourcePools_Update",
+        "description": "Updates the resource pool for the specified resource pool ID",
+        "parameters": [
+          {
+            "name": "resourcePoolId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "resource pool identifier. Uniquely identifies the resource pool across all resource pools submitted to the service."
+          },
+          {
+            "name": "parameters",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/UpdateSparkResourcePool"
+            },
+            "description": "The parameters to update a spark resource pool."
+          },
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated the details of the specified resource pool.",
+            "schema": {
+              "$ref": "#/definitions/SparkResourcePool"
+            }
+          },
+          "201": {
+            "description": "Successfully initiated an update of the specified resource pool."
+          },
+          "202": {
+            "description": "Successfully initiated an update of the specified resource pool."
+          }
+        },
+        "x-ms-long-running-operation": true
+      },
+      "delete": {
+        "tags": [
+          "SparkResourcePools"
+        ],
+        "operationId": "SparkResourcePools_Stop",
+        "description": "Cancels the running resource pool specified by the resource pool ID.",
+        "parameters": [
+          {
+            "name": "resourcePoolId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid",
+            "description": "resource pool identifier. Uniquely identifies the resource pool across all resource pools submitted to the service."
+          },
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully stopped the resource pool."
+          },
+          "202": {
+            "description": "Successfully initiated the stoppage of the specified resource pool."
+          },
+          "204": {
+            "description": "The specified resource pool was not found."
+          }
+        },
+        "x-ms-long-running-operation": true
+      }
+    }
+  },
+  "definitions": {
+    "CreateSparkResourcePool": {
+      "required": [
+        "name",
+        "properties"
+      ],
+      "name": {
+        "type": "string",
+        "description": "the friendly name of the resource pool to submit."
+      },
+      "properties": {
+        "properties": {
+          "$ref": "#/definitions/CreateSparkResourcePoolParameters",
+          "description": "The spark resource pool specific properties."
+        },
+        "description": "The parameters used to submit a new Data Lake Analytics resource pool creation request."
+      }
+    },
+    "CreateSparkResourcePoolParameters": {
+      "description": "Spark specific resource pool information",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name for the spark resource pool"
+        },
+        "resourcePoolVersion": {
+          "type": "string",
+          "description": "Version of the template used while deploying the resource pool"
+        },
+        "sparkVersion": {
+          "type": "string",
+          "description": "Spark version to be deployed on the instances of the resource pool"
+        },
+        "userStorageAccount": {
+          "type": "string",
+          "description": "Account name of the storage account (ADLS) where logs and history will be stored"
+        },
+        "sparkResourceCollection": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreateSparkResourcePoolItemParameters"
+          },
+          "description": "Definition of spark master and spark workers"
+        }
+      }
+    },
+    "CreateSparkResourcePoolItemParameters": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name for the spark master or spark workers"
+        },
+        "targetInstanceCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of instances of spark master or spark worker"
+        },
+        "perInstanceCoreCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of cores in each started instance of spark master or spark workers"
+        },
+        "perInstanceMemoryInGB": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Allocated memory in GB for each started instance of spark master or spark workers"
+        },
+        "description": "Data Lake Analytics Spark Resource Pool creation request"
+      }
+    },
+    "UpdateSparkResourcePool": {
+      "properties": {
+        "properties": {
+          "$ref": "#/definitions/UpdateSparkResourcePoolParameters",
+          "description": "The spark resource pool specific properties."
+        }
+      },
+      "description": "The parameters that can be used to update existing Data Lake Analytics spark resource pool. Only update of number of spark workers is allowed"
+    },
+    "UpdateSparkResourcePoolParameters": {
+      "description": "Update spark workers",
+      "properties": {
+        "sparkResourceCollection": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UpdateSparkResourcePoolItemParameters"
+          },
+          "description": "Definition of spark workers"
+        }
+      }
+    },
+    "UpdateSparkResourcePoolItemParameters": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Guid represting the spark worker"
+        },
+        "targetInstanceCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of instances of spark worker"
+        },
+        "description": "Data Lake Analytics Spark Resource Pool update request parameters"
+      }
+    },
+    "SparkResourcePool": {
+      "allOf": [
+        {
+          "$ref": "./activity.json#/definitions/AnalyticsActivity"
+        }
+      ],
+      "properties": {
+        "properties": {
+          "$ref": "#/definitions/SparkResourcePoolProperties",
+          "description": "The spark resource pool specific properties."
+        },
+        "description": "Full definition of the spark resource pool entity."
+      }
+    },
+    "SparkResourcePoolProperties": {
+      "description": "Spark specific resource pool information",
+      "properties": {
+        "name": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Name for the spark resource pool"
+        },
+        "resourcePoolVersion": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Version of the template used while deploying the resource pool"
+        },
+        "sparkVersion": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Spark version to be deployed on the instances of the resource pool"
+        },
+        "userStorageAccount": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Account name of the storage account (ADLS) where logs and history will be stored"
+        },
+        "sparkResourceCollection": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SparkResourcePoolItemProperties"
+          },
+          "description": "Definition of spark master and spark workers"
+        }
+      }
+    },
+    "SparkResourcePoolItemProperties": {
+      "properties": {
+        "name": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Name for the spark master or spark workers"
+        },
+        "targetInstanceCount": {
+          "readOnly": true,
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of instances of spark master or spark worker"
+        },
+        "perInstanceCoreCount": {
+          "readOnly": true,
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of cores in each started instance of spark master or spark workers"
+        },
+        "perInstanceMemoryInGB": {
+          "readOnly": true,
+          "type": "integer",
+          "format": "int32",
+          "description": "Allocated memory in GB for each started instance of spark master or spark workers"
+        },
+        "id": {
+          "readOnly": true,
+          "type": "string",
+          "format": "uuid",
+          "description": "Guid represting the spark master or worker"
+        },
+        "status": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Status of the spark resource pool"
+        },
+        "trackingUrl": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Url which can be used by clients to track the resource pool"
+        },
+        "runningInstanceCount": {
+          "readOnly": true,
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of instances running"
+        },
+        "outstandingInstanceCount": {
+          "readOnly": true,
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of instances yet to be launched"
+        },
+        "failedInstanceCount": {
+          "readOnly": true,
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of instances that failed to launch"
+        }
+      },
+      "description": "Data Lake Analytics Spark Resource Pool creation request"
+    },
+    "AnalyticsActivity": {
+      "properties": {
+        "id": {
+          "readOnly": true,
+          "type": "string",
+          "format": "uuid",
+          "description": "the activity's unique identifier (a GUID)."
+        },
+        "name": {
+          "readOnly": true,
+          "type": "string",
+          "description": "the friendly name of the activity."
+        },
+        "activityType": {
+          "readOnly": true,
+          "type": "string",
+          "description": "the activity type."
+        },
+        "analyticsUnits": {
+          "readOnly": true,
+          "type": "integer",
+          "format": "int32",
+          "description": "the number of Analytics Units (AUs) used for this activity."
+        },
+        "submitter": {
+          "readOnly": true,
+          "type": "string",
+          "description": "the user or account that submitted the activity."
+        },
+        "state": {
+          "readOnly": true,
+          "type": "string",
+          "enum": [
+            "Accepted",
+            "Compiling",
+            "Ended",
+            "New",
+            "Queued",
+            "Running",
+            "Scheduling",
+            "Starting",
+            "Paused",
+            "WaitingForCapacity"
+          ],
+          "x-ms-enum": {
+            "name": "ActivityState",
+            "modelAsString": true
+          },
+          "description": "the activity state."
+        },
+        "submitTime": {
+          "readOnly": true,
+          "type": "string",
+          "format": "date-time",
+          "description": "the time the activity was submitted to the service."
+        },
+        "startTime": {
+          "readOnly": true,
+          "type": "string",
+          "format": "date-time",
+          "description": "the start time of the activity."
+        },
+        "endTime": {
+          "readOnly": true,
+          "type": "string",
+          "format": "date-time",
+          "description": "the completion time of the activity."
+        },
+        "errorId": {
+          "readOnly": true,
+          "type": "string",
+          "description": "the specific identifier for the type of error encountered in the activity."
+        },
+        "tags": {
+          "readOnly": true,
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "the key-value pairs used to add additional metadata to the activity."
+        }
+      },
+      "description": "The common Data Lake Analytics activity information."
+    }
+  },
+  "parameters": {
+    "adlaresourcePoolDnsSuffixInPath": {
+      "name": "adlaResourcePoolDnsSuffix",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "default": "azuredatalakeanalytics.net",
+      "x-ms-skip-url-encoding": true,
+      "description": "The DNS suffix used as the base for all Azure Data Lake Analytics resource pool service requests.",
+      "x-ms-parameter-location": "client"
+    },
+    "ApiVersionParameter": {
+      "name": "api-version",
+      "in": "query",
+      "required": true,
+      "type": "string",
+      "description": "Client Api Version."
+    }
+  }
+}
