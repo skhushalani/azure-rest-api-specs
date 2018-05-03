@@ -35,6 +35,28 @@
     "application/json"
   ],
   "paths": {
+    "/activityTypes/spark/resourcePools": {
+      "get": {
+        "tags": [
+          "SparkResourcePools"
+        ],
+        "operationId": "SparkResourcePools_List",
+        "description": "Gets all the resource pools for the account.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved list of resource pools.",
+            "schema": {
+              "$ref": "#/definitions/SparkResourcePoolList"
+            }
+          }
+        }
+      }
+    },
     "/activityTypes/spark/resourcePools/{resourcePoolId}": {
       "put": {
         "tags": [
@@ -272,10 +294,14 @@
     },
     "UpdateSparkResourcePoolItemParameters": {
       "properties": {
-        "id": {
+        "name": {
+          "readOnly": true,
           "type": "string",
-          "format": "uuid",
-          "description": "Guid represting the spark worker"
+          "enum": [
+            "Spark Master",
+            "Spark Worker"
+          ],
+          "description": "Label for spark worker or spark master"
         },
         "targetInstanceCount": {
           "type": "integer",
@@ -337,7 +363,11 @@
         "name": {
           "readOnly": true,
           "type": "string",
-          "description": "Name for the spark master or spark workers"
+          "enum": [
+            "Spark Master",
+            "Spark Worker"
+          ],
+          "description": "Label for spark worker or spark master"
         },
         "targetInstanceCount": {
           "readOnly": true,
@@ -477,6 +507,24 @@
         }
       },
       "description": "The common Data Lake Analytics activity information."
+    },
+    "SparkResourcePoolList": {
+      "properties": {
+        "value": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnalyticsActivity"
+          },
+          "description": "the list of resource pools."
+        },
+        "nextLink": {
+          "readOnly": true,
+          "type": "string",
+          "description": "the link (url) to the next page of results."
+        }
+      },
+      "description": "List of resource pools."
     }
   },
   "parameters": {
